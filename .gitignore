@@ -1,0 +1,33 @@
+# File: .gitignore
+# Auth: M. Fras, Electronics Division, MPI for Physics, Munich
+# Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
+# Date: 06 Feb 2018
+# Rev.: 06 Feb 2018
+#
+# List of files to be ignored by git.
+#
+
+# This file itself.
+#.gitignore
+
+# Vi/Vim swap and backup files.
+.*.swp
+.*.swo
+*~
+
+# Other backup files.
+*.bac
+*.bak
+
+# Compiled python files.
+*.pyc
+
+# C/C++ object files, libraries.
+*.o
+*.a
+*.so
+
+# Binary executables.
+/Software/C/I2C/i2c-io/i2c-io
+/Software/C/I2C/i2c-io/i2c-io.exe
+
