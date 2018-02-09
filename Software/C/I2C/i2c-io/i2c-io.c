@@ -64,12 +64,17 @@ int main(int argc, char **argv)
 
     #ifdef USE_LIBI2C_MPSSE
     // Initialize the I2C master device.
-    status = i2c_init(i2c_freq);
+    status = i2c_init();
     if(status) {
         printf("ERROR: Unable to open I2C device.\n");
         return 1;
     }
-    // Set verbosity of I2C library functions.
+    status = i2c_set_freq(i2c_freq);
+    if(status) {
+        printf("ERROR: Unable to set the I2C frequency to %d Hz.\n", i2c_freq);
+        return 1;
+    }
+    // Set verbosity of the I2C library functions.
     i2c_set_verbose(1);
     #else
     // Open the I2C master.
