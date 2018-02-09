@@ -14,7 +14,7 @@
 // CAUTION:
 // The pins ADBUS1(14) and ADBUS2(15) *must* be tied together! Otherwise,
 // either no data will be driven onto SDA or only a constant high signal level
-//(i.e. NACK, 0xFF) will be received!
+// (i.e. NACK, 0xFF) will be received!
 //
 
 
@@ -69,6 +69,7 @@ int main(int argc, char **argv)
         printf("ERROR: Unable to open I2C device.\n");
         return 1;
     }
+    // Set the I2C bus frequency.
     status = i2c_set_freq(i2c_freq);
     if(status) {
         printf("ERROR: Unable to set the I2C frequency to %d Hz.\n", i2c_freq);
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
             return 1;
         }
         // Print data read from I2C.
-        printf("0x%02x\n",i2c_data[0] & 0x000000ff);
+        printf("0x%02x\n", i2c_data[0] & 0x000000ff);
         #else
         // Generate start condition.
         status = Start(mpsse_i2c);
@@ -174,7 +175,7 @@ int main(int argc, char **argv)
             return 1;
         }
         // Print data read from I2C.
-        printf("0x%02x\n",i2c_data[0] & 0x000000ff);
+        printf("0x%02x\n", i2c_data[0] & 0x000000ff);
         #else
         // Generate start condition.
         status = Start(mpsse_i2c);
