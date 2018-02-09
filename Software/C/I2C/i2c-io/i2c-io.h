@@ -17,8 +17,8 @@
 
 #define I2C_DATA_LEN_MAX        1024
 
-//#define DEBUG_LEVEL 0
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
+//#define DEBUG_LEVEL 1
 //#define DEBUG_LEVEL 2
 //#define DEBUG_LEVEL 3
 //#define DEBUG_LEVEL 4
