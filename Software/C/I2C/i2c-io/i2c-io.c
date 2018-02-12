@@ -2,9 +2,10 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 05 Feb 2018
-// Rev.: 09 Feb 2018
+// Rev.: 12 Feb 2018
 //
-// Raw I2C IO control program for the FTDI FH232H chip.
+// Raw I2C IO control program for the FTDI FH232H chip using FTDI's Multi -
+// Protocol Synchronous Serial Engine (MPSSE.
 //
 // FTDI FT232H pinning:
 // - ADBUS0(13): SCL
@@ -26,6 +27,7 @@
 
 
 
+// Function protoypes.
 int show_help(char* prog_name);
 
 
@@ -66,13 +68,13 @@ int main(int argc, char **argv)
     // Initialize the I2C master device.
     status = i2c_init();
     if(status) {
-        printf("ERROR: Unable to open I2C device.\n");
+        printf("%sUnable to open the I2C device.\n", PREFIX_ERROR);
         return 1;
     }
     // Set the I2C bus frequency.
     status = i2c_set_freq(i2c_freq);
     if(status) {
-        printf("ERROR: Unable to set the I2C frequency to %d Hz.\n", i2c_freq);
+        printf("%sUnable to set the I2C frequency to %d Hz.\n", PREFIX_ERROR, i2c_freq);
         return 1;
     }
     // Set verbosity of the I2C library functions.
@@ -81,7 +83,7 @@ int main(int argc, char **argv)
     // Open the I2C master.
     if(!((mpsse_i2c = MPSSE(I2C, i2c_freq, MSB)) != NULL && mpsse_i2c->open))
     {
-        printf("ERROR: Failed to initialize MPSSE: %s\n", ErrorString(mpsse_i2c));
+        printf("%sFailed to initialize MPSSE: %s\n", PREFIX_ERROR, ErrorString(mpsse_i2c));
         return -1;
     }
     #endif
@@ -108,46 +110,46 @@ int main(int argc, char **argv)
         i2c_data_len = 1;
         status = i2c_read(i2c_dev_adr, i2c_data, i2c_data_len);
         if(status) {
-            printf("ERROR: Unable to read %d byte(s) from the I2C chip address 0x%02x.\n", i2c_data_len, i2c_dev_adr);
+            printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
         // Print data read from I2C.
-        printf("0x%02x\n", i2c_data[0] & 0x000000ff);
+        printf("0x%02x\n", i2c_data[0] & 0xff);
         #else
         // Generate start condition.
         status = Start(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate start condition.\n");
+            printf("%sUnable to generate start condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Send device address with read command.
         i2c_data[0] = ((i2c_dev_adr & 0x7f) << 1) | 0x01;
         status = Write(mpsse_i2c, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sUnable to set the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Read from the I2C bus.
         i2c_data_len = 1;
         i2c_data_ptr = Read(mpsse_i2c, i2c_data_len);
         if(i2c_data_ptr == NULL) {
-            printf("ERROR: Unable to read %d byte(s) from the I2C chip address 0x%02x.\n", i2c_data_len, i2c_dev_adr);
+            printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x after reading data.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x after reading data.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Generate stop condition.
         status = Stop(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate stop condition.\n");
+            printf("%sUnable to generate stop condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Print data read from I2C.
@@ -164,83 +166,83 @@ int main(int argc, char **argv)
         i2c_data[0] = i2c_data_adr & 0xff;
         status = i2c_write(i2c_dev_adr, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C data address 0x%02x for device address 0x%02x.\n", i2c_data_adr, i2c_dev_adr);
+            printf("%sUnable to set the I2C data address 0x%02x for device address 0x%02x.\n", PREFIX_ERROR, i2c_data_adr, i2c_dev_adr);
             return 1;
         }
         // Read 1 byte from the I2C device.
         i2c_data_len = 1;
         status = i2c_read(i2c_dev_adr, i2c_data, i2c_data_len);
         if(status) {
-            printf("ERROR: Unable to read %d byte(s) from the I2C chip address 0x%02x.\n", i2c_data_len, i2c_dev_adr);
+            printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
         // Print data read from I2C.
-        printf("0x%02x\n", i2c_data[0] & 0x000000ff);
+        printf("0x%02x\n", i2c_data[0] & 0xff);
         #else
         // Generate start condition.
         status = Start(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate start condition.\n");
+            printf("%sUnable to generate start condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Send device address with write command.
         i2c_data[0] = ((i2c_dev_adr & 0x7f) << 1) | 0x00;
         status = Write(mpsse_i2c, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sUnable to set the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Write the data address
         i2c_data[0] = i2c_data_adr & 0xff;
         status = Write(mpsse_i2c, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C data address 0x%02x for device address 0x%02x.\n", i2c_data_adr, i2c_dev_adr);
+            printf("%sUnable to set the I2C data address 0x%02x for device address 0x%02x.\n", PREFIX_ERROR, i2c_data_adr, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x, data address 0x%02x.\n", i2c_dev_adr, i2c_data_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x, data address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr, i2c_data_adr);
             return 1;
         }
         //(Re-)Generate start condition.
         status = Start(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to(re-)generate start condition.\n");
+            printf("%sUnable to(re-)generate start condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Send device address with read command.
         i2c_data[0] = ((i2c_dev_adr & 0x7f) << 1) | 0x01;
         status = Write(mpsse_i2c, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sUnable to set the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Read from the I2C bus.
         i2c_data_len = 1;
         i2c_data_ptr = Read(mpsse_i2c, i2c_data_len);
         if(i2c_data_ptr == NULL) {
-            printf("ERROR: Unable to read %d byte(s) from the I2C chip address 0x%02x.\n", i2c_data_len, i2c_dev_adr);
+            printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x, data address 0x%02x after reading data.\n", i2c_dev_adr, i2c_data_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x, data address 0x%02x after reading data.\n", PREFIX_ERROR, i2c_dev_adr, i2c_data_adr);
             return 1;
         }
         // Generate stop condition.
         status = Stop(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate stop condition.\n");
+            printf("%sUnable to generate stop condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Print data read from I2C.
@@ -265,26 +267,26 @@ int main(int argc, char **argv)
         // Send the I2C data.
         status = i2c_write(i2c_dev_adr, i2c_data, i2c_data_len + 1);
         if(status) {
-            printf("ERROR: Unable to write %d byte(s) to the I2C chip address 0x%02x, data address 0x%02x.\n", i2c_data_len, i2c_dev_adr, i2c_data_adr);
+            printf("%sUnable to write %d byte(s) to the I2C chip address 0x%02x, data address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr, i2c_data_adr);
             return 1;
         }
         #else
         // Generate start condition.
         status = Start(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate start condition.\n");
+            printf("%sUnable to generate start condition.\n", PREFIX_ERROR);
             return 1;
         }
         // Send device address with write command.
         i2c_data[0] = ((i2c_dev_adr & 0x7f) << 1) | 0x00;
         status = Write(mpsse_i2c, i2c_data, 1);
         if(status) {
-            printf("ERROR: Unable to set the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sUnable to set the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Prepare the I2C data.
@@ -294,23 +296,24 @@ int main(int argc, char **argv)
         // Send the I2C data.
         status = Write(mpsse_i2c, i2c_data, i2c_data_len + 1);
         if(status) {
-            printf("ERROR: Unable to write %d byte(s) to the I2C chip address 0x%02x, data address 0x%02x.\n", i2c_data_len, i2c_dev_adr, i2c_data_adr);
+            printf("%sUnable to write %d byte(s) to the I2C chip address 0x%02x, data address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr, i2c_data_adr);
             return 1;
         }
         // Check for acknowledge.
         if(GetAck(mpsse_i2c) != ACK) {
-            printf("ERROR: Did not get acknowledge from the I2C chip address 0x%02x after writing data.\n", i2c_dev_adr);
+            printf("%sDid not get acknowledge from the I2C chip address 0x%02x after writing data.\n", PREFIX_ERROR, i2c_dev_adr);
             return 1;
         }
         // Generate stop condition.
         status = Stop(mpsse_i2c);
         if(status) {
-            printf("ERROR: Unable to generate stop condition.\n");
+            printf("%sUnable to generate stop condition.\n", PREFIX_ERROR);
             return 1;
         }
         #endif
     } else {
-        printf("ERROR: Specify either 2..3(for read) or 4(for write) parameters!");
+        printf("%sSpecify either 2..3(for read) or 4(for write) parameters!", PREFIX_ERROR);
+        return 1;
     }
 
     // Close the I2C device.
@@ -325,8 +328,11 @@ int main(int argc, char **argv)
 
 
 
+// Show help message.
 int show_help(char* prog_name)
 {
+    printf("Raw I2C IO control program (read/write)\n");
+    printf("\n");
     printf("Usage: %s CHIP-ADR [DATA-ADR] [DATA]\n", prog_name);
     return 0;
 }

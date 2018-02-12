@@ -2,7 +2,7 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 09 Feb 2018
-// Rev.: 09 Feb 2018
+// Rev.: 12 Feb 2018
 //
 // Basic hardware I2C IO functions based on FTDI's Multi-Protocol Synchronous
 // Serial Engine (MPSSE).
@@ -33,7 +33,7 @@ int i2c_init(void)
     // Open the I2C device with default frequency of 100 kHz.
     if(!((i2c_mpsse = MPSSE(I2C, ONE_HUNDRED_KHZ, MSB)) != NULL && i2c_mpsse->open))
     {
-        fprintf(stderr, "%s: %s: ERROR: Failed to initialize MPSSE: %s\n", __FILE__, __FUNCTION__, ErrorString(i2c_mpsse));
+        fprintf(stderr, "%s: %s: %sFailed to initialize MPSSE: %s\n", __FILE__, __FUNCTION__, PREFIX_ERROR, ErrorString(i2c_mpsse));
         return -1;
     }
 
@@ -67,7 +67,7 @@ int i2c_get_freq(int *i2c_freq)
     // Check if the I2C device was initialized.
     if(i2c_mpsse == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: The I2C device was not properly initialized.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sThe I2C device was not properly initialized.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -86,14 +86,14 @@ int i2c_set_freq(int i2c_freq)
     // Check if the I2C device was initialized.
     if(i2c_mpsse == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: The I2C device was not properly initialized.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sThe I2C device was not properly initialized.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
     status = SetClock(i2c_mpsse, i2c_freq);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to set the I2C frequency to %d Hz.\n", __FILE__, __FUNCTION__, i2c_freq);
+            fprintf(stderr, "%s: %s: %sUnable to set the I2C frequency to %d Hz.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_freq);
         return -1;
     }
 
@@ -108,7 +108,7 @@ int i2c_info(void)
     // Check if the I2C device was initialized.
     if(i2c_mpsse == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: The I2C device was not properly initialized.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sThe I2C device was not properly initialized.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -140,7 +140,7 @@ int i2c_write(int i2c_dev_adr, char *data, int size)
     // Check if the I2C device was initialized.
     if(i2c_mpsse == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: The I2C device was not properly initialized.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sThe I2C device was not properly initialized.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -148,7 +148,7 @@ int i2c_write(int i2c_dev_adr, char *data, int size)
     status = Start(i2c_mpsse);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to generate start condition.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sUnable to generate start condition.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -157,14 +157,14 @@ int i2c_write(int i2c_dev_adr, char *data, int size)
     status = Write(i2c_mpsse, i2c_data, 1);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to set the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sUnable to set the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
     // Check for acknowledge.
     if(GetAck(i2c_mpsse) != ACK) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sDid not get acknowledge from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
@@ -172,14 +172,14 @@ int i2c_write(int i2c_dev_adr, char *data, int size)
     status = Write(i2c_mpsse, data, size);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to write %d byte(s) to the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, size, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sUnable to write %d byte(s) to the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, size, i2c_dev_adr);
         return -1;
     }
 
     // Check for acknowledge.
     if(GetAck(i2c_mpsse) != ACK) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Did not get acknowledge from the I2C chip address 0x%02x after writing data.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sDid not get acknowledge from the I2C chip address 0x%02x after writing data.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
@@ -187,7 +187,7 @@ int i2c_write(int i2c_dev_adr, char *data, int size)
     status = Stop(i2c_mpsse);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to generate stop condition.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sUnable to generate stop condition.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -206,7 +206,7 @@ int i2c_read(int i2c_dev_adr, char *data, int size)
     // Check if the I2C device was initialized.
     if(i2c_mpsse == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: The I2C device was not properly initialized.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sThe I2C device was not properly initialized.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -214,7 +214,7 @@ int i2c_read(int i2c_dev_adr, char *data, int size)
     status = Start(i2c_mpsse);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to generate start condition.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sUnable to generate start condition.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 
@@ -223,14 +223,14 @@ int i2c_read(int i2c_dev_adr, char *data, int size)
     status = Write(i2c_mpsse, i2c_data, 1);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to set the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sUnable to set the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
     // Check for acknowledge.
     if(GetAck(i2c_mpsse) != ACK) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Did not get acknowledge from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sDid not get acknowledge from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
@@ -238,14 +238,14 @@ int i2c_read(int i2c_dev_adr, char *data, int size)
     i2c_data_ptr = Read(i2c_mpsse, size);
     if(i2c_data_ptr == NULL) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to read %d byte(s) from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, size, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, size, i2c_dev_adr);
         return -1;
     }
 
     // Check for acknowledge.
     if(GetAck(i2c_mpsse) != ACK) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Did not get acknowledge from the I2C chip address 0x%02x after reading data.\n", __FILE__, __FUNCTION__, i2c_dev_adr);
+            fprintf(stderr, "%s: %s: %sDid not get acknowledge from the I2C chip address 0x%02x after reading data.\n", __FILE__, __FUNCTION__, PREFIX_ERROR, i2c_dev_adr);
         return -1;
     }
 
@@ -253,7 +253,7 @@ int i2c_read(int i2c_dev_adr, char *data, int size)
     status = Stop(i2c_mpsse);
     if(status) {
         if(i2c_mpsse_verbose)
-            fprintf(stderr, "%s: %s: ERROR: Unable to generate stop condition.\n", __FILE__, __FUNCTION__);
+            fprintf(stderr, "%s: %s: %sUnable to generate stop condition.\n", __FILE__, __FUNCTION__, PREFIX_ERROR);
         return -1;
     }
 

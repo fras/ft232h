@@ -2,7 +2,7 @@
 # Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 # Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 # Date: 05 Feb 2018
-# Rev.: 09 Feb 2018
+# Rev.: 12 Feb 2018
 #
 # Makefile for the I2C raw IO control using the FDTI FH232H chip.
 #
@@ -25,7 +25,7 @@ HEADER_FILES = i2c-io.h
 # ********** Additional settings. **********
 BACKUP_DIR         = backup
 BACKUP_FILES_SRC   = $(SOURCE_FILES) $(HEADER_FILES) Makefile
-RM_FILES_CLEAN     = core *.o *.stackdump $(PROG)
+RM_FILES_CLEAN     = core *.o *.stackdump $(PROG) $(PROG).exe
 RM_FILES_REALCLEAN = $(RM_FILES_CLEAN) *.bak *~
 
 

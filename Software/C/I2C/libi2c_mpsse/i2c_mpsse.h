@@ -2,11 +2,17 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 09 Feb 2018
-// Rev.: 09 Feb 2018
+// Rev.: 12 Feb 2018
 //
 // Header file for the basic hardware I2C IO functions based on FTDI's
 // Multi-Protocol Synchronous Serial Engine (MPSSE).
 //
+
+
+
+// Message prefixes.
+#define PREFIX_DEBUG            "DEBUG: "
+#define PREFIX_ERROR            "ERROR: "
 
 
 
