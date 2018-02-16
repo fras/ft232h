@@ -2,7 +2,7 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 09 Feb 2018
-// Rev.: 12 Feb 2018
+// Rev.: 16 Feb 2018
 //
 // Basic hardware I2C IO functions based on FTDI's Multi-Protocol Synchronous
 // Serial Engine (MPSSE).
@@ -55,6 +55,7 @@ int i2c_reset(void)
 int i2c_close(void)
 {
     Close(i2c_mpsse);
+    i2c_mpsse = NULL;
 
     return 0;
 }
