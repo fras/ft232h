@@ -2,9 +2,9 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 05 Feb 2018
-// Rev.: 12 Feb 2018
+// Rev.: 16 Feb 2018
 //
-// Header file for raw I2C IO control program for the FTDI FH232H chip.
+// Header file for the raw I2C IO control program for the FTDI FH232H chip.
 //
 
 

@@ -2,10 +2,10 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 05 Feb 2018
-// Rev.: 12 Feb 2018
+// Rev.: 16 Feb 2018
 //
 // Raw I2C IO control program for the FTDI FH232H chip using FTDI's Multi -
-// Protocol Synchronous Serial Engine (MPSSE.
+// Protocol Synchronous Serial Engine (MPSSE).
 //
 // FTDI FT232H pinning:
 // - ADBUS0(13): SCL
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
             printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
-        // Print data read from I2C.
+        // Print the data read from I2C.
         printf("0x%02x\n", i2c_data[0] & 0xff);
         #else
         // Generate start condition.
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
             printf("%sUnable to generate stop condition.\n", PREFIX_ERROR);
             return 1;
         }
-        // Print data read from I2C.
+        // Print the data read from I2C.
         printf("0x%02x\n",(*i2c_data_ptr) & 0x000000ff);
         free(i2c_data_ptr);
         #endif
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
             printf("%sUnable to read %d byte(s) from the I2C chip address 0x%02x.\n", PREFIX_ERROR, i2c_data_len, i2c_dev_adr);
             return 1;
         }
-        // Print data read from I2C.
+        // Print the data read from I2C.
         printf("0x%02x\n", i2c_data[0] & 0xff);
         #else
         // Generate start condition.
@@ -245,7 +245,7 @@ int main(int argc, char **argv)
             printf("%sUnable to generate stop condition.\n", PREFIX_ERROR);
             return 1;
         }
-        // Print data read from I2C.
+        // Print the data read from I2C.
         printf("0x%02x\n",(*i2c_data_ptr) & 0x000000ff);
         free(i2c_data_ptr);
         #endif
