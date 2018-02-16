@@ -2,7 +2,7 @@
 # Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 # Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 # Date: 06 Feb 2018
-# Rev.: 13 Feb 2018
+# Rev.: 16 Feb 2018
 #
 # List of files to be ignored by git.
 #
@@ -28,6 +28,8 @@
 *.so
 
 # Binary executables.
+/Software/C/GPIO/gpio-ctl/gpio-ctl
+/Software/C/GPIO/gpio-ctl/gpio-ctl.exe
 /Software/C/I2C/i2c-io/i2c-io
 /Software/C/I2C/i2c-io/i2c-io.exe
 /Software/C/I2C/i2c-si5xxx-init/i2c-si5xxx-init
