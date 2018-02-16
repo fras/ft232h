@@ -2,11 +2,16 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 09 Feb 2018
-// Rev.: 12 Feb 2018
+// Rev.: 16 Feb 2018
 //
 // Header file for the basic hardware I2C IO functions based on FTDI's
 // Multi-Protocol Synchronous Serial Engine (MPSSE).
 //
+
+
+
+#ifndef __I2C_MPSSE_H
+#define __I2C_MPSSE_H
 
 
 
@@ -26,4 +31,8 @@ int i2c_set_freq(int i2c_freq);
 int i2c_set_verbose(int verbose);
 int i2c_write(int i2c_dev_adr, char *data, int size);
 int i2c_read(int i2c_dev_adr, char *data, int size);
+
+
+
+#endif
 

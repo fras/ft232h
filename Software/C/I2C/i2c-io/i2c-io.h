@@ -9,6 +9,11 @@
 
 
 
+#ifndef __I2C_IO_H
+#define __I2C_IO_H
+
+
+
 // Use I2C MPSSE library functions.
 #define USE_LIBI2C_MPSSE
 #ifdef USE_LIBI2C_MPSSE
@@ -34,4 +39,8 @@
 //#define DEBUG_LEVEL 2
 //#define DEBUG_LEVEL 3
 //#define DEBUG_LEVEL 4
+
+
+
+#endif
 
