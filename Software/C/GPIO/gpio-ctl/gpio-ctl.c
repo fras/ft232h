@@ -2,7 +2,7 @@
 // Auth: M. Fras, Electronics Division, MPI for Physics, Munich
 // Mod.: M. Fras, Electronics Division, MPI for Physics, Munich
 // Date: 16 Feb 2018
-// Rev.: 16 Feb 2018
+// Rev.: 22 Jun 2018
 //
 // GPIO control program for the FTDI FH232H chip using FTDI's Multi -
 // Protocol Synchronous Serial Engine (MPSSE).
@@ -44,9 +44,11 @@ int main(int argc, char **argv)
     int gpio_mask;
 
     // Check command line arguments.
-    if(argc < 1) {
-        show_help(argv[0]);
-        return 1;
+    if(argc > 1) {
+        if(!strncmp(argv[1], "-h", 2) || !strncmp(argv[1], "--h", 3)) {
+            show_help(argv[0]);
+            return 1;
+        }
     }
 
     // Initialize the GPIO device.
