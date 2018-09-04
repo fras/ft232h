@@ -1,0 +1,117 @@
+#HEADER
+# Date: Montag, 3. September 2018 16:11
+# File Version: 3
+# Software Name: Precision Clock EVB Software
+# Software Version: 5.1
+# Software Date: July 23, 2014
+# Part number: Si5319
+#END_HEADER
+#PROFILE
+# Name: Si5319
+#INPUT
+# Name: CKIN
+# Channel: 1
+# Frequency (MHz): 114,285000
+# N3: 7619
+# Maximum (MHz): 128,570625
+# Minimum (MHz): 109,976636
+#END_INPUT
+#INPUT
+# Name: CKIN
+# Channel: 2
+# Frequency (MHz): 114,285000
+# N3: 7619
+# CKIN2 to CKIN1 Ratio: 1 / 1
+# Maximum (MHz): 128,570625
+# Minimum (MHz): 109,976636
+#END_INPUT
+#PLL
+# Name: PLL
+# Frequency (MHz): 5040,000000
+# XA-XB Frequency (MHz): 114,285000
+# f3 (MHz): 0,015000
+# N1_HS: 9
+# N2_HS: 10
+# N2_LS: 33600
+# Phase Offset Resolution (ns): 1,78571
+# BWSEL_REG Option: Frequency (Hz)
+#  3:  138
+#  2:  282
+#  1:  590
+#END_PLL
+#OUTPUT
+# Name: CKOUT
+# Channel: 1
+# Frequency (MHz): 40,000000
+# NC1_LS: 14
+# CKOUT1 to CKIN1 Ratio: 8000 / 22857
+# Maximum (MHz): 45,000000
+# Minimum (MHz): 38,492063
+#END_OUTPUT
+#CONTROL_FIELD
+# Register-based Controls
+#        FREE_RUN_EN: 0x1
+#    CKOUT_ALWAYS_ON: 0x0
+#         BYPASS_REG: 0x0
+#          VCOFREEZE: 0x0
+#            SQ_ICAL: 0x1
+#          BWSEL_REG: 0x3
+#              ICMOS: 0x3
+#              SLEEP: 0x0
+#         SFOUT1_REG: 0x7
+#             HLOG_1: 0x0
+#          DSBL1_REG: 0x0
+#             PD_CK1: 0x0
+#            VALTIME: 0x1
+#              LOCKT: 0x4
+#            LOL_PIN: 0x1
+#         CK_BAD_POL: 0x1
+#            LOL_POL: 0x1
+#            INT_POL: 0x1
+#           LOS1_MSK: 0x1
+#           LOSX_MSK: 0x1
+#            LOL_MSK: 0x1
+#              N1_HS: 0x5
+#             NC1_LS: 0xD
+#              N2_LS: 0x833F
+#              N2_HS: 0x6
+#                N31: 0x1DC2
+#                N32: 0x1DC2
+#            INT_PIN: 0x0
+#            LOS1_EN: 0x3
+#            FOS1_EN: 0x1
+#END_CONTROL_FIELD
+#REGISTER_MAP
+  0, 54h
+  2, 32h
+  3, 15h
+  5, EDh
+  6, 2Fh
+  8, 00h
+ 10, 00h
+ 11, 40h
+ 19, 2Ch
+ 20, 3Eh
+ 22, DFh
+ 23, 1Fh
+ 24, 3Fh
+ 25, A0h
+ 31, 00h
+ 32, 00h
+ 33, 0Dh
+ 40, C0h
+ 41, 83h
+ 42, 3Fh
+ 43, 00h
+ 44, 1Dh
+ 45, C2h
+ 46, 00h
+ 47, 1Dh
+ 48, C2h
+131, 1Fh
+132, 02h
+138, 0Fh
+139, FFh
+136, 40h
+#END_REGISTER_MAP
+#END_PROFILE
